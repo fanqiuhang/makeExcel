@@ -138,6 +138,10 @@ public class Excel {
         }
     }
 
+    /**
+     * 设置每一个工作簿的内容。当然每个工作簿的内容是相同的
+     * @param sheet
+     */
     public static void init(HSSFSheet sheet){
         HSSFRow row = sheet.createRow(0);
 
