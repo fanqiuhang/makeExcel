@@ -2,12 +2,9 @@ package com.example.demo;
 
 
 import org.apache.commons.io.FileUtils;
-
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +27,9 @@ public class Excel {
     public static void export(){
         HSSFWorkbook wb = new HSSFWorkbook();
 
+        /**
+         * 设置返回字体样式
+         */
         HSSFCellStyle cellStyle_back = wb.createCellStyle();
         HSSFFont font_back = wb.createFont();
         font_back.setColor(HSSFColor.BLUE.index);
@@ -37,6 +37,9 @@ public class Excel {
         font_back.setUnderline((byte) 1);
         cellStyle_back.setFont(font_back);
 
+        /**
+         * 设置通用字体样式
+         */
         HSSFCellStyle cellStyle_common = wb.createCellStyle();
         cellStyle_common.setWrapText(true);
         cellStyle_common.setAlignment((short) 0);
@@ -45,6 +48,9 @@ public class Excel {
         cellStyle_common.setFont(font_common);
         cellStyle_common.setDataFormat((short) 0x31);
 
+        /**
+         * 所有门牌号
+         */
         String[] strings = {"1#","5#","1#B101","1#B102","1#B103","1#B104","1#B105","1#B106","1#B107"
                            ,"1#B201","1#B202","1#B203","1#B204","1#B205","1#B206","1#B207"
                            ,"1#B301","1#B302","1#B303","1#B304","1#B305","1#B306","1#B307"
@@ -100,7 +106,7 @@ public class Excel {
         int length = wb.getNumberOfSheets();
         for (int i = 0; i < length; i++) {
             HSSFSheet sheet = wb.getSheetAt(i);
-            //设置返回格式
+            //设置返回字体样式
             HSSFRow row_back = sheet.getRow(0);
             HSSFCell cell_back = row_back.getCell(6);
             cell_back.setCellStyle(cellStyle_back);
