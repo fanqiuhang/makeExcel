@@ -6,11 +6,10 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,19 @@ public class Excel {
 
     private static HSSFWorkbook wb = new HSSFWorkbook();
 
-    public static void export(List<Building> buildings){
+    private static HSSFSheet sheet_phone = null;
+
+    private static int i = 0;
+
+    public static void export(List<Building> buildings,File phone){
+
+        try {
+            HSSFWorkbook wb_phone = new HSSFWorkbook(new FileInputStream(phone));
+            sheet_phone = wb_phone.getSheetAt(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         list = buildings;
         /**
          * 创建目录
@@ -211,6 +222,8 @@ public class Excel {
 
         HSSFRow row2 = sheet.createRow(1);
         set(row2,"联系方式","其他联系方式");
+        HSSFCell c_phone = row2.getCell(1);
+        getPhone(c_phone);
 
         HSSFRow row3 = sheet.createRow(2);
         set(row3,"代理人","业主爱人");
@@ -298,4 +311,21 @@ public class Excel {
         cellStyle_common.setDataFormat((short) 0x31);
         cell.setCellStyle(cellStyle_common);
     }
+
+
+    /**
+     *
+     */
+    private static void getPhone(HSSFCell cell) {
+        HSSFRow row_phone = sheet_phone.getRow(i);
+        if (row_phone != null) {
+            HSSFCell cell_phone = row_phone.getCell(0);
+            double value = cell_phone.getNumericCellValue();
+            //System.out.println(new BigDecimal(value).toString());
+            cell.setCellValue(new BigDecimal(value).toString());
+        }
+        System.out.println("第"+i+"个");
+        i++;
+    }
+
 }

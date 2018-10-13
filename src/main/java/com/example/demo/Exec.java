@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Exec {
         list.add(new Building("1#","B",14,7));
         list.add(new Building("5#","A",20,8));
         list.add(new Building("3#","C",15,9));
-        Excel.export(list);
+        File phone = new File("F://phone.xls");
+        Excel.export(list,phone);
     }
 }
