@@ -23,7 +23,7 @@ public class Excel {
 
     private static HSSFWorkbook wb = new HSSFWorkbook();
 
-    private static HSSFSheet sheet_phone = null;
+    private static HSSFSheet sheet_data = null;
 
     private static int i = 0;
 
@@ -31,7 +31,7 @@ public class Excel {
 
         try {
             HSSFWorkbook wb_phone = new HSSFWorkbook(new FileInputStream(phone));
-            sheet_phone = wb_phone.getSheetAt(0);
+            sheet_data = wb_phone.getSheetAt(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,7 +52,7 @@ public class Excel {
             Integer num = building.getNum();
             for (int i = 0; i < floor; i++) {
                 for (int j = 0; j < num; j++) {
-                    String fore = "";
+                    /*String fore = "";
                     if (i == 13){
                         fore = "12A";
                     } else if (i == 14){
@@ -61,10 +61,15 @@ public class Excel {
                         fore = "3A";
                     } else {
                         fore = i + 1 + "";
+                    }*/
+                    String fore = i + 1 +"";
+
+                    if (i < 9) {
+                        fore = "0" + fore;
                     }
 
                     String end = j + 1 + "";
-                    if (j <= 8){
+                    if (j <= 10){
                         end = "0" + (j + 1);
                     }
                     HSSFSheet sheet = wb.createSheet(name + fore + end);
@@ -81,7 +86,7 @@ public class Excel {
             //设置返回字体样式
             HSSFRow row_back = sheet.getRow(0);
             HSSFCell cell_back = row_back.getCell(6);
-            if ("返回".equals(cell_back.getStringCellValue())){
+            if (cell_back != null && "返回".equals(cell_back.getStringCellValue())){
                 setBackStyle(cell_back);
 
                 Integer last = sheet.getLastRowNum() + 1;
@@ -109,7 +114,7 @@ public class Excel {
                 for (int j = 0; j < num; j++) {
                     HSSFCell cell = row.getCell(j);
 
-                    String fore = "";
+                    /*String fore = "";
                     if (i == 13){
                         fore = "12A";
                     } else if (i == 14){
@@ -118,10 +123,14 @@ public class Excel {
                         fore = "3A";
                     } else {
                         fore = i + 1 + "";
+                    }*/
+                    String fore = i + 1 + "";
+                    if (i < 9) {
+                        fore = "0" + fore;
                     }
 
                     String end = j + 1 + "";
-                    if (j <= 8){
+                    if (j <= 10){
                         end = "0" + (j + 1);
                     }
 
@@ -165,7 +174,7 @@ public class Excel {
             HSSFRow row = dir.createRow(i);
             for (int j = 0; j < num; j++) {
                 HSSFCell cell = row.createCell(j);
-                String fore = "";
+                /*String fore = "";
                 if (i == 13){
                     fore = "12A";
                 } else if (i == 14){
@@ -174,7 +183,8 @@ public class Excel {
                     fore = "3A";
                 } else {
                     fore = i + 1 + "";
-                }
+                }*/
+                String fore = i + 1 + "";
 
                 String end = j + 1 + "";
                 if (j <= 8){
@@ -201,10 +211,12 @@ public class Excel {
 
         HSSFCell c0 = row.createCell(0);
         c0.setCellValue("业主");
-        HSSFCell c1 = row.createCell(1);
+        HSSFCell cell_name = row.createCell(1);
+
         HSSFCell c2 = row.createCell(2);
         c2.setCellValue("座机");
-        HSSFCell c3 = row.createCell(3);
+        HSSFCell cell_tel = row.createCell(3);
+
         HSSFCell c4 = row.createCell(4);
         c4.setCellValue("跟进日期");
         HSSFCell c5 = row.createCell(5);
@@ -222,8 +234,8 @@ public class Excel {
 
         HSSFRow row2 = sheet.createRow(1);
         set(row2,"联系方式","其他联系方式");
-        HSSFCell c_phone = row2.getCell(1);
-        getPhone(c_phone);
+        HSSFCell cell_phone = row2.getCell(1);
+
 
         HSSFRow row3 = sheet.createRow(2);
         set(row3,"代理人","业主爱人");
@@ -236,6 +248,8 @@ public class Excel {
 
         HSSFRow row6 = sheet.createRow(5);
         set(row6,"面积","户型特点");
+        HSSFCell cell_square = row6.getCell(1);
+
 
         HSSFRow row7 = sheet.createRow(6);
         set(row7,"朝向",null);
@@ -264,6 +278,7 @@ public class Excel {
         HSSFRow row15 = sheet.createRow(14);
         set(row15,"出售记录",null);
 
+        getData(cell_name,cell_tel,cell_phone,cell_square);
     }
 
     /**
@@ -314,18 +329,63 @@ public class Excel {
 
 
     /**
-     *
+     * 设置名字，座机，手机，面积 信息
      */
-    private static void getPhone(HSSFCell cell) {
-        HSSFRow row_phone = sheet_phone.getRow(i);
-        if (row_phone != null) {
-            HSSFCell cell_phone = row_phone.getCell(0);
-            double value = cell_phone.getNumericCellValue();
-            //System.out.println(new BigDecimal(value).toString());
-            cell.setCellValue(new BigDecimal(value).toString());
+    private static void getData(HSSFCell cell_name,HSSFCell cell_tel,HSSFCell cell_phone,HSSFCell cell_square) {
+        HSSFRow row_data = sheet_data.getRow(i);
+        System.out.println("第" + (i + 1) + "个信息");
+        if (row_data != null) {
+            HSSFSheet sheet = cell_name.getSheet();
+            String sheet_name = sheet.getSheetName();
+            System.out.println(sheet_name);
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(sheet_name.substring(0,1));
+            buffer.append(sheet_name.substring(2,3));
+            buffer.append("-");
+            buffer.append(sheet_name.substring(3));
+            String str = buffer.toString();
+
+            HSSFCell cell_1 = row_data.getCell(1);
+            System.out.println(cell_1.getStringCellValue());
+
+            if (str.equals(cell_1.getStringCellValue())) {
+                System.out.println("相等");
+                //设置名字
+                getType(row_data.getCell(2),cell_name);
+                //设置座机
+                getType(row_data.getCell(4),cell_tel);
+                //设置电话
+                getType(row_data.getCell(5),cell_phone);
+                //设置面积
+                String square = String.valueOf(new BigDecimal(row_data.getCell(3).getNumericCellValue()));
+                if (square.length() > 7) {
+                    square = square.substring(0,6);
+                }
+                cell_square.setCellValue(square);
+
+                //只有成功读取了该条信息，才能到下一条
+                i++;
+            }
         }
-        System.out.println("第"+i+"个");
-        i++;
     }
 
+    private static void getType(HSSFCell cell_data,HSSFCell cell) {
+        int type = cell_data.getCellType();
+        switch (type) {
+            case 0:
+                String str = new BigDecimal(cell_data.getNumericCellValue()).toString();
+                if (str.indexOf(".") > 0) {
+                    str = str.substring(0,str.indexOf("."));
+                }
+                cell.setCellValue(str);
+                break;
+            case 1:
+                String str2 = cell_data.getStringCellValue();
+                cell.setCellValue(str2);
+                break;
+            default:
+                cell.setCellValue("");
+        }
+
+    }
 }

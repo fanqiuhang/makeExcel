@@ -12,9 +12,12 @@ import java.util.List;
 public class Exec {
     public static void main(String[] args) {
         List list = new ArrayList();
-        list.add(new Building("1#","B",14,7));
-        list.add(new Building("5#","A",20,8));
-        list.add(new Building("3#","C",15,9));
+        list.add(new Building("4#","A",14,6));
+        list.add(new Building("4#","B",14,7));
+        list.add(new Building("4#","C",14,7));
+        list.add(new Building("5#","A",14,7));
+        list.add(new Building("5#","B",14,7));
+        list.add(new Building("5#","C",14,7));
         File phone = new File("F://phone.xls");
         Excel.export(list,phone);
     }
